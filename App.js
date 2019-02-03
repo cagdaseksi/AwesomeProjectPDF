@@ -22,7 +22,8 @@ export default class App extends React.Component {
             numberOfPages: 0,
             horizontal: false,
             width: WIN_WIDTH,
-            link: ''
+            link: '',
+            video: 0
         };
         this.pdf = null;
     }
@@ -63,9 +64,9 @@ export default class App extends React.Component {
             { page: 4, link : 'http://samples.leanpub.com' }
         ];
         console.log(`findLink: ${index}`);
-
-        var text = `${numbers[index].link}`
-
+        console.log(`text: ${numbers[index]}`);
+        var text = `${numbers[index]}` != 'undefined' ? `${numbers[index].link}` : ''
+        console.log(`text: ${text}`);
         this.setState({link: text});
 
     };
@@ -113,7 +114,8 @@ export default class App extends React.Component {
                         {!this.state.horizontal ? (<Text style={styles.btnText}>{'Yatay'}</Text>) : (
                             <Text style={styles.btnText}>{'Dikey'}</Text>)}
                     </TouchableHighlight>
-                    <TouchableHighlight style={styles.btn} onPress={ ()=>{ Linking.openURL(this.state.link)}} >
+                    <TouchableHighlight disabled={this.state.link == ''} style={ this.state.link == '' ? styles.btnDisable : styles.btn} onPress={ ()=>{ 
+                        Linking.openURL(this.state.link)}} >
                         <Text style={styles.btnText}>{'Video'}</Text>
                     </TouchableHighlight>
                 </View>
