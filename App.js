@@ -12,13 +12,6 @@ import Pdf from 'react-native-pdf';
 
 const WIN_WIDTH = Dimensions.get('window').width;
 const WIN_HEIGHT = Dimensions.get('window').height;
-//const links = [ 'http://samples.leanpub.com', 'https://google.com' ];
-
-var numbers1 = [
-    { page: 1, link : 'link1' },
-    { page: 2, link : 'link3' },
-    { page: 3, link : 'link4' },
-];
 
 export default class App extends React.Component {
     constructor(props) {
@@ -63,11 +56,11 @@ export default class App extends React.Component {
 
     findLink = (index) => {
         var numbers = [
-            { page: 0, link : 'link0' },
-            { page: 1, link : 'link1' },
-            { page: 2, link : 'link2' },
-            { page: 3, link : 'link3' },
-            { page: 4, link : 'link4' }
+            { page: 0, link : 'http://samples.leanpub.com' },
+            { page: 1, link : 'https://google.com' },
+            { page: 2, link : 'http://samples.leanpub.com' },
+            { page: 3, link : 'https://google.com' },
+            { page: 4, link : 'http://samples.leanpub.com' }
         ];
         console.log(`findLink: ${index}`);
 
@@ -120,8 +113,8 @@ export default class App extends React.Component {
                         {!this.state.horizontal ? (<Text style={styles.btnText}>{'Yatay'}</Text>) : (
                             <Text style={styles.btnText}>{'Dikey'}</Text>)}
                     </TouchableHighlight>
-                    <TouchableHighlight style={styles.btn} onPress={ ()=>{ Linking.openURL('https://google.com')}} >
-                        <Text style={styles.btnText}>{this.state.link}</Text>
+                    <TouchableHighlight style={styles.btn} onPress={ ()=>{ Linking.openURL(this.state.link)}} >
+                        <Text style={styles.btnText}>{'Video'}</Text>
                     </TouchableHighlight>
                 </View>
                 <View style={{flex:1,width: this.state.width}}>
