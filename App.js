@@ -23,7 +23,7 @@ export default class App extends React.Component {
             horizontal: false,
             width: WIN_WIDTH,
             link: '',
-            video: 0
+            pageText: 1
         };
         this.pdf = null;
     }
@@ -56,6 +56,7 @@ export default class App extends React.Component {
     };
 
     findLink = (index) => {
+
         var numbers = [
             { page: 0, link : 'http://samples.leanpub.com' },
             { page: 1, link : 'https://google.com' },
@@ -63,16 +64,16 @@ export default class App extends React.Component {
             { page: 3, link : 'https://google.com' },
             { page: 4, link : 'http://samples.leanpub.com' }
         ];
-        console.log(`findLink: ${index}`);
-        console.log(`text: ${numbers[index]}`);
-        var text = `${numbers[index]}` != 'undefined' ? `${numbers[index].link}` : ''
-        console.log(`text: ${text}`);
-        this.setState({link: text});
 
+        var text = `${numbers[index]}` != 'undefined' ? `${numbers[index].link}` : '';
+        this.setState({link: text});
+        this.setState({pageText: index})
     };
 
     switchHorizontal = () => {
-        this.setState({horizontal: !this.state.horizontal, page: this.state.page});
+        console.log(`this.state.page: ${this.state.page}`);
+        var status = this.state.horizontal ? false : true;
+        this.setState({horizontal: status, page: 1, pageText: 1, link: this.findLink(1)});
     };
 
     render() {
@@ -91,7 +92,7 @@ export default class App extends React.Component {
                                         onPress={() => this.prePage()}>
                         <Text style={styles.btnText}>{'-'}</Text>
                     </TouchableHighlight>
-                    <View style={styles.btnText}><Text style={styles.btnText}>Page {this.state.page}</Text></View>
+                    <View style={styles.btnText}><Text style={styles.btnText}>Page {this.state.pageText}</Text></View>
                     <TouchableHighlight disabled={this.state.page === this.state.numberOfPages}
                                         style={this.state.page === this.state.numberOfPages ? styles.btnDisable : styles.btn}
                                         onPress={() => this.nextPage()}>
@@ -111,11 +112,10 @@ export default class App extends React.Component {
                     {/* <View style={styles.btnText}><Text style={styles.btnText}>{!this.state.horizontal ? (<Text style={styles.btnText}>{'Yatay'}</Text>) : (
                             <Text style={styles.btnText}>{'Dikey'}</Text>)}</Text></View> */}
                     <TouchableHighlight style={styles.btn} onPress={() => this.switchHorizontal()}>
-                        {!this.state.horizontal ? (<Text style={styles.btnText}>{'Yatay'}</Text>) : (
+                    {!this.state.horizontal ? (<Text style={styles.btnText}>{'Yatay'}</Text>) : (
                             <Text style={styles.btnText}>{'Dikey'}</Text>)}
                     </TouchableHighlight>
-                    <TouchableHighlight disabled={this.state.link == ''} style={ this.state.link == '' ? styles.btnDisable : styles.btn} onPress={ ()=>{ 
-                        Linking.openURL(this.state.link)}} >
+                    <TouchableHighlight disabled={this.state.link == ''} style={ this.state.link == '' ? styles.btnDisable : styles.btn} onPress={ ()=>{Linking.openURL(this.state.link)}} >
                         <Text style={styles.btnText}>{'Video'}</Text>
                     </TouchableHighlight>
                 </View>
@@ -127,6 +127,7 @@ export default class App extends React.Component {
                          page={this.state.page}
                          scale={this.state.scale}
                          horizontal={this.state.horizontal}
+                         //horizontal={true}
                          onLoadComplete={(numberOfPages, filePath,{width,height},tableContents) => {
                              this.state.numberOfPages = numberOfPages; //do not use setState, it will cause re-render
                              console.log(`total page count: ${numberOfPages}`);
@@ -136,7 +137,8 @@ export default class App extends React.Component {
                          onPageChanged={(page, numberOfPages) => {
                              this.state.page = page; //do not use setState, it will cause re-render
                              console.log(`current page: ${page}`);
-                             //this.setState({page: page});
+                             //this.setState({pageText: page});
+                             this.findLink(page)
                          }}
                          onError={(error) => {
                              console.log(error);
